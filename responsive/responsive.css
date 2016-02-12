@@ -1,10 +1,45 @@
 /* responsive.css */
 
 /* Based on w3schools.com/cssref/css3_pr_mediaquery.asp */
+/* How  the customer explained it */
 @media screen and (min-width: 480px) {
     .software {
         width: 128px; 
 		height: 240px;
-		background: url(software.png);
+		background: url(software.png) 0px 0px;
     }
 }
+
+/* How the Project Leader Understood It */
+@media screen and (max-width: 480px) {
+    .software {
+        width: 128px; 
+		height: 240px;
+		background: url(software.png) -128px 0px;
+    }
+}
+
+/* How the Analyst Designed it */
+/*
+@media screen and (max-width: 480px) {
+    .software {
+        width: 128px; 
+		height: 240px;
+		background: url(software.png) -256px 0px;
+    }
+}
+*/
+
+/* How the Programmer wrote it */
+
+/* How the Business Consultant described it */
+
+/* How the project was documented */
+
+/* What operations installed */
+
+/* How the customer was billed */
+
+/* How it was supported */
+
+/* What the customer really needs */
