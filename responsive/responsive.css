@@ -1,7 +1,10 @@
 /* responsive.css */
 
-.software {
-	width: 128px; 
-	height: 240px;
-	background: url(software.png);
+/* Based on w3schools.com/cssref/css3_pr_mediaquery.asp */
+@media screen and (min-width: 480px) {
+    .software {
+        width: 128px; 
+		height: 240px;
+		background: url(software.png);
+    }
 }
