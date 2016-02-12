@@ -1,6 +1,11 @@
-/* responsive.css */
+/* 
+	responsive.css
 
-/* Based on w3schools.com/cssref/css3_pr_mediaquery.asp */
+	Allows a webpage to display specific cells
+	of the image 'software.png' depending on
+	the dimensions of the screen.
+*/
+
 
 /* How  the customer explained it */
 @media screen and (min-width: 1201px) {
