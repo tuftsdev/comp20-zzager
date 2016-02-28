@@ -8,6 +8,7 @@ body {
 	color: #FFD608;
 	font-family: Georgia, Times, 'Times New Roman', serif;
 	text-align: center;
+	font-size: 50px;
 }
 
 video {
@@ -19,4 +20,9 @@ video {
 	color: #FFFFFF;
 	font-family: Georgia, Times, 'Times New Roman', serif;
 	text-align: center;
+}
+
+img {
+	height: 30%;
+	width: 30%;
 }
