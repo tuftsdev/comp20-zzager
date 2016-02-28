@@ -15,6 +15,10 @@
 
 <script>
 	// Complete this section and create a CSS file named style.css
+	// state pic from: https://www.etsy.com/listing/122427365/my-old-kentucky-home-hand-lettering?ref=market
+	// chorus pic from: http://www.bethsnotesplus.com/2013/09/music-words.html/chorus-word
+	// ostrich pic from: http://wonderopolis.org/wonder/do-ostriches-really-bury-their-heads-in-the-sand/
+
 	theText = {
 		one: "The sun shines bright in My Old Kentucky Home,",
 		two: "'Tis summer, the people are gay;",
@@ -41,65 +45,62 @@
 		chooseText(video.currentTime);
 	}, true);
 
+	// determines which line of the song will be displayed
 	function chooseText(time){
-
-		// one: 8.2 - 15.34
-		if(time > 8.2 && time < 15) {
-			theElem.innerHTML = "<h1>" + theText.one + " " + time+ "</h1>";
+		if(time < 7) {
+			display("<img src='state.jpg'>",time,false);
 		}
-
-		// two: 15.35 - 22
-		if(time > 15 && time < 22) {
-			theElem.innerHTML = "<h1>" + theText.two + " " + time+ "</h1>";
+		if(time > 8.2 && time < 15) { // one: 8.2 - 15.34
+			display(theText.one,time,false);
 		}
-
-		// three: 22.1 - 28.6
-		if(time > 22.1 && time < 28.6) {
-			theElem.innerHTML = "<h1>" + theText.three + " " + time+ "</h1>";
+		if(time > 15 && time < 22) { // two: 15.35 - 22
+			display(theText.two,time,false);
 		}
-
-		// four: 28.7 - 35.5
-		if(time > 28.7 && time < 35.5) {
-			theElem.innerHTML = "<h1>" + theText.four + " " + time+ "</h1>";
+		if(time > 22 && time < 28.6) { // three: 22.1 - 28.6
+			display(theText.three,time,false);
 		}
-		// five: 35.6 - 42.5
-		if(time > 35.6 && time < 42.5) {
-			theElem.innerHTML = "<h1>" + theText.five + " " + time+ "</h1>";
+		if(time > 28.6 && time < 35.5) { // four: 28.7 - 35.5
+			display("<img src='birds.jpg'>",time,false);
 		}
-		// six: 42.6 - 49.4
-		if(time > 42.6 && time < 49.4) {
-			theElem.innerHTML = "<h1>" + theText.six + " " + time+ "</h1>";
+		if(time > 35.5 && time < 42.5) { // five: 35.6 - 42.5
+			display(theText.five,time,false);
 		}
-		// seven: 49.4 - 56
-		if(time > 49.4 && time < 56) {
-			theElem.innerHTML = "<h1>" + theText.seven + " " + time+ "</h1>";
+		if(time > 42.5 && time < 49.4) { // six: 42.6 - 49.4
+			display(theText.six,time,false);
 		}
-		// eight: 56.1 - 64
-		if(time > 56.1 && time < 64) {
-			theElem.innerHTML = "<h1>" + theText.eight + " " + time+ "</h1>";
+		if(time > 49.4 && time < 56) { // seven: 49.4 - 56
+			display(theText.seven,time,false);	
+		}
+		if(time > 56 && time < 64) { // eight: 56.1 - 64
+			display(theText.eight,time,false);
 		}
 
 		// chorus
+		if(time > 64 && time < 69.2) { // ten: 64.1 - 70
+			display(theText.ten,time,true);
+		}
+		if(time > 69.2 && time < 76.2) { // eleven: 70.1 - 76.2
+			display(theText.eleven,time,true);
+		}
+		if(time > 76.2 && time < 80) { // twelve: 76.3 - 80
+			display(theText.twelve,time,true);
+		}
+		if(time > 80 && time < 84) { // thirteen: 80.1 - 84
+			display(theText.thirteen,time,true);
+		}
+		if(time > 84) { // fourteen: 84.1 - END
+			display(theText.fourteen,time,true);
+		}
+	}
 
-		// ten: 64.1 - 70
-		if(time > 64.1 && time < 69.2) {
-			theElem.innerHTML = "<h1>" + theText.ten + " " + time+ "</h1>";
-		}
-		// eleven: 70.1 - 76.2
-		if(time > 69.3 && time < 76.2) {
-			theElem.innerHTML = "<h1>" + theText.eleven + " " + time+ "</h1>";
-		}
-		// twelve: 76.3 - 80
-		if(time > 76.3 && time < 80) {
-			theElem.innerHTML = "<h1>" + theText.twelve + " " + time+ "</h1>";
-		}
-		// thirteen: 80.1 - 84
-		if(time > 80.1 && time < 84) {
-			theElem.innerHTML = "<h1>" + theText.thirteen + " " + time+ "</h1>";
-		}
-		// fourteen: 84.1 - END
-		if(time > 84.1) {
-			theElem.innerHTML = "<h1>" + theText.fourteen + " " + time+ "</h1>";
+	// displays current line of song on the page
+	function display(text,time,chorus) {
+		if (chorus) { // if the chorus is playing
+			theElem.innerHTML = "<img src='chorus.png'>" + "<h1>" + text + " " + time+ "</h1>";
+		} 
+
+		else { // if the chorus is not playing
+			theElem.innerHTML = "<h1>" + text + " " + time+ "</h1>";
 		}
 	}
 
