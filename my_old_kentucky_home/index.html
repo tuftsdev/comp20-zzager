@@ -15,9 +15,37 @@
 
 <script>
 	// Complete this section and create a CSS file named style.css
-	theText = "yo";
+	theText = {
+		one: "The sun shines bright in My Old Kentucky Home,",
+		two: "'Tis summer, the people are gay;",
+		three: "The corn-top's ripe and the meadow's in the bloom",
+		four: "While the birds make music all the day.",
+
+		five: "The young folks roll on the little cabin floor,",
+		six: "All merry, all happy and bright;",
+		seven: "By 'n' by hard times comes a knocking at the door,",
+		eight: "Then My Old Kentucky Home, good night!",
+
+		nine: "Chorus",
+		ten: "Weep no more my lady",
+		eleven: "Oh weep no more today;",
+		twelve: "We will sing one song",
+		thirteen: "For My Old Kentucky Home",
+		fourteen: "For My Old Kentucky Home, far away"
+	};
 	theElem = document.getElementById("lyrics");
-	theElem.innerHTML = theText;
+
+	video = document.getElementById("music_video");
+
+	video.addEventListener("timeupdate", function() { 
+		//document.getElementsByTagName("video")[0].play(); 
+		theElem.innerHTML = theText.two + " " + video.currentTime;
+	}, true);
+
+	//theElem.innerHTML = theText.two + " " + video.currentTime;
+
+
+	//console.log(video.currentTime);
 
 </script>
 </body>
