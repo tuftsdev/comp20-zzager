@@ -14,7 +14,6 @@
 <div id="lyrics"></div>
 
 <script>
-	// Complete this section and create a CSS file named style.css
 	// state pic from: https://www.etsy.com/listing/122427365/my-old-kentucky-home-hand-lettering?ref=market
 	// chorus pic from: http://www.bethsnotesplus.com/2013/09/music-words.html/chorus-word
 	// ostrich pic from: http://wonderopolis.org/wonder/do-ostriches-really-bury-their-heads-in-the-sand/
@@ -48,59 +47,59 @@
 	// determines which line of the song will be displayed
 	function chooseText(time){
 		if(time < 7) {
-			display("<img src='state.jpg'>",time,false);
+			display("<img src='state.jpg'>",false);
 		}
 		if(time > 8.2 && time < 15) { // one: 8.2 - 15.34
-			display(theText.one,time,false);
+			display(theText.one,false);
 		}
 		if(time > 15 && time < 22) { // two: 15.35 - 22
-			display(theText.two,time,false);
+			display(theText.two,false);
 		}
 		if(time > 22 && time < 28.6) { // three: 22.1 - 28.6
-			display(theText.three,time,false);
+			display(theText.three,false);
 		}
 		if(time > 28.6 && time < 35.5) { // four: 28.7 - 35.5
-			display("<img src='birds.jpg'>",time,false);
+			display("<img src='birds.jpg'>",false);
 		}
 		if(time > 35.5 && time < 42.5) { // five: 35.6 - 42.5
-			display(theText.five,time,false);
+			display(theText.five,false);
 		}
 		if(time > 42.5 && time < 49.4) { // six: 42.6 - 49.4
-			display(theText.six,time,false);
+			display(theText.six,false);
 		}
 		if(time > 49.4 && time < 56) { // seven: 49.4 - 56
-			display(theText.seven,time,false);	
+			display(theText.seven,false);	
 		}
 		if(time > 56 && time < 64) { // eight: 56.1 - 64
-			display(theText.eight,time,false);
+			display(theText.eight,false);
 		}
 
 		// chorus
 		if(time > 64 && time < 69.2) { // ten: 64.1 - 70
-			display(theText.ten,time,true);
+			display(theText.ten,true);
 		}
 		if(time > 69.2 && time < 76.2) { // eleven: 70.1 - 76.2
-			display(theText.eleven,time,true);
+			display(theText.eleven,true);
 		}
 		if(time > 76.2 && time < 80) { // twelve: 76.3 - 80
-			display(theText.twelve,time,true);
+			display(theText.twelve,true);
 		}
 		if(time > 80 && time < 84) { // thirteen: 80.1 - 84
-			display(theText.thirteen,time,true);
+			display(theText.thirteen,true);
 		}
 		if(time > 84) { // fourteen: 84.1 - END
-			display(theText.fourteen,time,true);
+			display(theText.fourteen,true);
 		}
 	}
 
 	// displays current line of song on the page
-	function display(text,time,chorus) {
+	function display(text,chorus) {
 		if (chorus) { // if the chorus is playing
-			theElem.innerHTML = "<img src='chorus.png'>" + "<h1>" + text + " " + time+ "</h1>";
+			theElem.innerHTML = "<img src='chorus.png'>" + "<h2>" + text + " </h1>";
 		} 
 
 		else { // if the chorus is not playing
-			theElem.innerHTML = "<h1>" + text + " " + time+ "</h1>";
+			theElem.innerHTML = "<h2>" + text + " </h2>";
 		}
 	}
 

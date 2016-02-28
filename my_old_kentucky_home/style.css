@@ -1,1 +1,22 @@
 /* style.css */
+
+body {
+	background-color: #000080;
+}
+
+#title {
+	color: #FFD608;
+	font-family: Georgia, Times, 'Times New Roman', serif;
+	text-align: center;
+}
+
+video {
+	display: block;
+	margin: 0 auto;
+}
+
+#lyrics {
+	color: #FFFFFF;
+	font-family: Georgia, Times, 'Times New Roman', serif;
+	text-align: center;
+}
