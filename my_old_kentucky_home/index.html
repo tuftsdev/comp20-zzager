@@ -14,10 +14,6 @@
 <div id="lyrics"></div>
 
 <script>
-	// state pic from: https://www.etsy.com/listing/122427365/my-old-kentucky-home-hand-lettering?ref=market
-	// chorus pic from: http://www.bethsnotesplus.com/2013/09/music-words.html/chorus-word
-	// ostrich pic from: http://wonderopolis.org/wonder/do-ostriches-really-bury-their-heads-in-the-sand/
-
 	theText = {
 		one: "The sun shines bright in My Old Kentucky Home,",
 		two: "'Tis summer, the people are gay;",
@@ -36,8 +32,8 @@
 		thirteen: "For My Old Kentucky Home",
 		fourteen: "For My Old Kentucky Home, far away"
 	};
+	
 	theElem = document.getElementById("lyrics");
-
 	video = document.getElementById("music_video");
 
 	video.addEventListener("timeupdate", function() { 
@@ -97,7 +93,6 @@
 		if (chorus) { // if the chorus is playing
 			theElem.innerHTML = "<h2>" + text + " </h2> <img src='chorus.png'>";
 		} 
-
 		else { // if the chorus is not playing
 			theElem.innerHTML = "<h2>" + text + " </h2>";
 		}
