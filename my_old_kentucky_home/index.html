@@ -38,14 +38,70 @@
 	video = document.getElementById("music_video");
 
 	video.addEventListener("timeupdate", function() { 
-		//document.getElementsByTagName("video")[0].play(); 
-		theElem.innerHTML = theText.two + " " + video.currentTime;
+		chooseText(video.currentTime);
 	}, true);
 
-	//theElem.innerHTML = theText.two + " " + video.currentTime;
+	function chooseText(time){
 
+		// one: 8.2 - 15.34
+		if(time > 8.2 && time < 15) {
+			theElem.innerHTML = "<h1>" + theText.one + " " + time+ "</h1>";
+		}
 
-	//console.log(video.currentTime);
+		// two: 15.35 - 22
+		if(time > 15 && time < 22) {
+			theElem.innerHTML = "<h1>" + theText.two + " " + time+ "</h1>";
+		}
+
+		// three: 22.1 - 28.6
+		if(time > 22.1 && time < 28.6) {
+			theElem.innerHTML = "<h1>" + theText.three + " " + time+ "</h1>";
+		}
+
+		// four: 28.7 - 35.5
+		if(time > 28.7 && time < 35.5) {
+			theElem.innerHTML = "<h1>" + theText.four + " " + time+ "</h1>";
+		}
+		// five: 35.6 - 42.5
+		if(time > 35.6 && time < 42.5) {
+			theElem.innerHTML = "<h1>" + theText.five + " " + time+ "</h1>";
+		}
+		// six: 42.6 - 49.4
+		if(time > 42.6 && time < 49.4) {
+			theElem.innerHTML = "<h1>" + theText.six + " " + time+ "</h1>";
+		}
+		// seven: 49.4 - 56
+		if(time > 49.4 && time < 56) {
+			theElem.innerHTML = "<h1>" + theText.seven + " " + time+ "</h1>";
+		}
+		// eight: 56.1 - 64
+		if(time > 56.1 && time < 64) {
+			theElem.innerHTML = "<h1>" + theText.eight + " " + time+ "</h1>";
+		}
+
+		// chorus
+
+		// ten: 64.1 - 70
+		if(time > 64.1 && time < 69.2) {
+			theElem.innerHTML = "<h1>" + theText.ten + " " + time+ "</h1>";
+		}
+		// eleven: 70.1 - 76.2
+		if(time > 69.3 && time < 76.2) {
+			theElem.innerHTML = "<h1>" + theText.eleven + " " + time+ "</h1>";
+		}
+		// twelve: 76.3 - 80
+		if(time > 76.3 && time < 80) {
+			theElem.innerHTML = "<h1>" + theText.twelve + " " + time+ "</h1>";
+		}
+		// thirteen: 80.1 - 84
+		if(time > 80.1 && time < 84) {
+			theElem.innerHTML = "<h1>" + theText.thirteen + " " + time+ "</h1>";
+		}
+		// fourteen: 84.1 - END
+		if(time > 84.1) {
+			theElem.innerHTML = "<h1>" + theText.fourteen + " " + time+ "</h1>";
+		}
+	}
 
 </script>
 </body>
