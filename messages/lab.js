@@ -15,13 +15,12 @@ function parse() {
 			data = request.responseText;
 			text = JSON.parse(data);
 			theElem = document.getElementById("messages");
-			theElem.innerHTML = "<h4>DATA: </h4>" + request.response;
+			
+			for (i = 0; i < text.length; i++) {
+				theElem.innerHTML += "<p>" + text[i].content + " " + text[i].username + "</p>";
+			}
 		}
 	}
-
-	
-
-	//theElem.innerHTML = JSON.parse(request.responseText);
 
 	request.send(null);
 
