@@ -1,1 +1,15 @@
 /* Your CSS here... */
+
+#messages p {
+	background-color: #8EF4A3;
+	border-radius: 10px;
+	padding: 4px;
+}
+
+.firstText {
+	font-size: 20px;
+}
+
+.secondText {
+	font-size: 12px;
+}
