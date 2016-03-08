@@ -4,7 +4,7 @@ request = new XMLHttpRequest();
 
 function parse() {
 
-	request.open("GET","data.json",true);
+	request.open("GET","https://messagehub.herokuapp.com/messages.json",true);
 
 	request.onreadystatechange = function() {
 
