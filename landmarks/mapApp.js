@@ -72,7 +72,9 @@ function renderMe() {
 	// Create a marker
 	marker = new google.maps.Marker({
 		position: me,
-		title: "<div id='infowindow'>"+closestLandmark.name+"<br /> is " 
+		title: "<div id='infowindow'><h2>Current Location</h2>"+
+				"The nearest historical landmark \""
+				+closestLandmark.name+"\"<br /> is " 
 				+closestLandmark.distance.toFixed(2)+" miles away </div>"
 	});
 	marker.setMap(map);
@@ -100,7 +102,7 @@ function makePolyline() {
     	geodesic: true,
     	strokeColor: '#FF0000',
     	strokeOpacity: 1.0,
-    	strokeWeight: 2
+    	strokeWeight: 5
   	});
 
   	path.setMap(map);
@@ -124,6 +126,8 @@ function showPeople(people) {
 				icon: peopleImage
 			});
 			markers.setMap(map);
+			calcDistance(people[i].lat,people[i].lng,"person");
+			console.log(markers.title + ", distance: "+personMileDistance)
 
 			// Open info window on click of marker
 			google.maps.event.addListener(markers, 'click', function() {
@@ -153,7 +157,7 @@ function showLandmarks(landmarks) {
 			icon: landmarkImage
 		});
 		markers.setMap(map);
-		distanceHandling();
+		landmarkDistanceHandling();
 
 		// Open info window on click of marker
 		google.maps.event.addListener(markers, 'click', function() {
@@ -164,13 +168,13 @@ function showLandmarks(landmarks) {
 }
 
 // deals with everything distance related
-function distanceHandling(){
+function landmarkDistanceHandling(){
 
-	calcDistance(lm_coor[1],lm_coor[0]);
+	calcDistance(lm_coor[1],lm_coor[0],"landmark");
 
 	// find closest distance/landmark
-	if (mileDistance < closestLandmark.distance) {
-		closestLandmark.distance = mileDistance;
+	if (landmarkMileDistance < closestLandmark.distance) {
+		closestLandmark.distance = landmarkMileDistance;
 		closestLandmark.name = lm;
 		closestLandmark.lat = lm_coor[1];
 		closestLandmark.lng = lm_coor[0];
@@ -184,29 +188,31 @@ function distanceHandling(){
 // both are objects with "lat" and "lng" keys.
 // shout out to talkol on Stack Overflow for the guidance.
 // (http://stackoverflow.com/questions/14560999/using-the-haversine-formula-in-javascript)
-function calcDistance(landmarkLat,landmarkLng) {
+function calcDistance(lat,lng,obj) {
 
 	var R = 6371; // km 
 	
 	// latitude difference
-	var x1 = landmarkLat-myLat;
+	var x1 = lat-myLat;
 	var dLat = x1.toRad();
 
 	// longitude difference
-	var x2 = landmarkLng-myLong;
+	var x2 = lng-myLong;
 	var dLon = x2.toRad();
 
 	var a = Math.sin(dLat/2) * Math.sin(dLat/2) + 
-			Math.cos(myLat.toRad()) * Math.cos(landmarkLat.toRad()) * 
+			Math.cos(myLat.toRad()) * Math.cos(lat.toRad()) * 
 			Math.sin(dLon/2) * Math.sin(dLon/2);  
 	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
 	var kmDistance = R * c;
 
 	// convert from KM to miles
-	mileDistance = kmDistance * 0.621371;
-
-	//console.log("distance: "+mileDistance);
-
+	// separates landmark and person distances
+	if (obj === "landmark") {
+		landmarkMileDistance = kmDistance * 0.621371;
+	} else if (obj === "person") {
+		personMileDistance = kmDistance * 0.621371;
+	}
 }
 
 Number.prototype.toRad = function() {
