@@ -64,7 +64,7 @@ function initMap() {
 
 function getData(latitude,longitude) {
 	// send login, latitude, and longitude
-	var username = "MARI_YOUNG";
+	username = "MARI_YOUNG";
 	var parameters = "login="+username+"&lat="+myLat+"&lng="+myLong;
 	var theData;
 	console.log(parameters);
@@ -87,31 +87,77 @@ function getData(latitude,longitude) {
 function printStuff(data) {
 
 	// people
-	console.log(data.people);
+	showPeople(data.people);
 
-	for (i in data.people) {
-		console.log(data.people[i].login+" lat: "+data.people[i].lat
-					+" long:"+data.people[i].lng);
+	// landmarks
+	showLandmarks(data.landmarks);
+}
 
-		// Create new markers
-		person = new google.maps.LatLng(data.people[i].lat,data.people[i].lng);
-		new_marker = new google.maps.Marker({
-			position: person,
-			title: data.people[i].login
+function showPeople(people) {
+
+	// Create new markers
+	peopleImage = {
+		url: 'http://icons.iconarchive.com/icons/umut-pulat/tulliana-2/128/laptop-icon.png',
+		scaledSize: new google.maps.Size(50, 50)
+	};
+
+	for (i in people) {
+		console.log(people[i].login+" lat: "+people[i].lat+" long:"+people[i].lng);
+
+		if (people[i].login !== username) {
+			person = new google.maps.LatLng(people[i].lat,people[i].lng);
+			people_marker = new google.maps.Marker({
+				position: person,
+				title: people[i].login,
+				icon: peopleImage
+			});
+			people_marker.setMap(map);
+			console.log(people_marker);
+
+			var new_infowindow;
+
+			// Open info window on click of marker
+			google.maps.event.addListener(people_marker, 'click', function() {
+				new_infowindow[i].setContent(people_marker.title);
+				new_infowindow[i].open(map,people_marker);
+			});
+		}
+	}
+}
+
+function showLandmarks(landmarks) {
+	// landmarks
+	console.log(landmarks);
+
+	// Create new markers
+	landmarkImage = {
+		url: 'https://d30y9cdsu7xlg0.cloudfront.net/png/174628-200.png',
+		scaledSize: new google.maps.Size(50, 50)
+	};
+	//landmarkImage = 'https://d30y9cdsu7xlg0.cloudfront.net/png/174628-200.png';
+
+	for (i in landmarks) {
+		lm = landmarks[i].properties.Location_Name;
+		lm_coor = landmarks[i].geometry.coordinates;
+		console.log(lm+" lat: "+lm_coor[0]+" long:"+lm_coor[1]);
+	
+		landmark = new google.maps.LatLng(lm_coor[0],lm_coor[1]);
+		landmarker = new google.maps.Marker({
+			position: landmark,
+			title: lm,
+			icon: landmarkImage
 		});
-		new_marker.setMap(map);
+		landmarker.setMap(map);
+		console.log(landmarkImage);
 
 		var new_infowindow;
 
 		// Open info window on click of marker
-		google.maps.event.addListener(new_marker, 'click', function() {
-			new_infowindow[i].setContent(new_marker.title);
-			new_infowindow[i].open(map, new_marker);
+		google.maps.event.addListener(landmarker, 'click', function() {
+			new_infowindow[i].setContent(landmarker.title);
+			new_infowindow[i].open(map,landmarker);
 		});
 	}
-
-	// landmarks
-	console.log(data.landmarks);
 
 }
 
