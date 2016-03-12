@@ -5,17 +5,11 @@ var map;
 var marker;
 myLat = 0, myLong = 0;
 var infowindow;
-var closestLandmark = "";
-var closestDistance = 1;
-//var me = new google.maps.LatLng(myLat, myLng);
-
-/*
-var myOptions = {
-	center: me,
-	zoom: 13, // larger zoom number, larger zoom
-	mapTypeId: google.maps.MapTypeId.ROADMAP
-};
-*/
+closestLandmark = {};
+closestLandmark.name = "";
+closestLandmark.distance = 1;
+closestLandmark.lat = 0;
+closestLandmark.lng = 0;
 
 function initMap() {
 
@@ -36,33 +30,11 @@ function initMap() {
 					myLat = position.coords.latitude;
 					myLong = position.coords.longitude;
 					getData(myLat,myLong);
-					renderMe();
 				});
 		} else {
 			alert("Geolocation is not supported by your web browser. Sorry!");
 		}
 	}
-}
-
-// puts me on the map with a marker
-function renderMe() {
-	me = new google.maps.LatLng(myLat, myLong);
-	map.panTo(me); // Update map and go there...
-
-	// Create a marker
-	marker = new google.maps.Marker({
-		position: me,
-		title: myLat
-	});
-	marker.setMap(map);
-
-	infowindow = new google.maps.InfoWindow();
-		
-	// Open info window on click of marker
-	google.maps.event.addListener(marker, 'click', function() {
-		infowindow.setContent(marker.title);
-		infowindow.open(map, marker);
-	});
 }
 
 function getData(latitude,longitude) {
@@ -80,15 +52,58 @@ function getData(latitude,longitude) {
 		if (request.readyState == 4 && request.status == 200) {
 			raw = request.responseText;
 			theData = JSON.parse(raw);
-			printStuff(theData);
+			loadElements(theData);
 		}
 	};
-
 }
 
-function printStuff(data) {
+//puts everything on the map
+function loadElements(data) {
 	showPeople(data.people); // people
 	showLandmarks(data.landmarks); // landmarks
+	renderMe(); // me (user)
+}
+
+// puts me on the map with a marker
+function renderMe() {
+	me = new google.maps.LatLng(myLat, myLong);
+	map.panTo(me); // Update map and go there...
+
+	// Create a marker
+	marker = new google.maps.Marker({
+		position: me,
+		title: "<div id='infowindow'>"+closestLandmark.name+"<br /> is " 
+				+closestLandmark.distance.toFixed(2)+" miles away </div>"
+	});
+	marker.setMap(map);
+	infowindow = new google.maps.InfoWindow();
+		
+	// Open info window on click of marker
+	google.maps.event.addListener(marker, 'click', function() {
+		infowindow.setContent(marker.title);
+		infowindow.open(map, marker);
+	});
+
+	makePolyline(); // draws line to nearest landmark
+}
+
+// draws a line between me (the user) and the nearest landmark
+function makePolyline() {
+
+	var pathCoords = [
+    	{lat: myLat, lng: myLong},
+    	{lat: closestLandmark.lat, lng: closestLandmark.lng}
+  	];
+
+  	var path = new google.maps.Polyline({
+    	path: pathCoords,
+    	geodesic: true,
+    	strokeColor: '#FF0000',
+    	strokeOpacity: 1.0,
+    	strokeWeight: 2
+  	});
+
+  	path.setMap(map);
 }
 
 // shout out to Wouter Florijn for the help on Stack Overflow
@@ -119,6 +134,8 @@ function showPeople(people) {
 	}
 }
 
+// places landmarks on the map
+// NOTE: lm_coor[1]: is latitude, lm_coor[0] is longitude
 function showLandmarks(landmarks) {
 
 	landmarkImage = { // landmark marker icon
@@ -128,9 +145,7 @@ function showLandmarks(landmarks) {
 
 	for (i in landmarks) {
 		lm = landmarks[i].properties.Location_Name;
-		lm_coor = landmarks[i].geometry.coordinates;
-		console.log(lm+" lat: "+lm_coor[1]+" long:"+lm_coor[0]);
-	
+		lm_coor = landmarks[i].geometry.coordinates;	
 		landmark = new google.maps.LatLng(lm_coor[1],lm_coor[0]);
 		markers = new google.maps.Marker({
 			position: landmark,
@@ -154,11 +169,15 @@ function distanceHandling(){
 	calcDistance(lm_coor[1],lm_coor[0]);
 
 	// find closest distance/landmark
-	if (mileDistance < closestDistance) {
-		closestDistance = mileDistance;
-		closestLandmark = lm;
+	if (mileDistance < closestLandmark.distance) {
+		closestLandmark.distance = mileDistance;
+		closestLandmark.name = lm;
+		closestLandmark.lat = lm_coor[1];
+		closestLandmark.lng = lm_coor[0];
 	}
-	console.log("closestLandmark: "+closestLandmark);
+	console.log("closestLandmark: "+closestLandmark.name+" dist: "
+				+closestLandmark.distance+" lat: "+
+				closestLandmark.lat+" long: "+closestLandmark.lng);
 }
 
 // finds distance between an inputted landmark and me.
