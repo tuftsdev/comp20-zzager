@@ -1,5 +1,12 @@
 // mapApp.js
 
+// Assignment 2 for Tufts Comp 20
+
+// Script to load the web program that displys a user, other users,
+// and nearby historical landmarks.
+
+// by Zach Zager
+
 var map;
 var marker;
 username = "MARI_YOUNG";
@@ -12,7 +19,7 @@ closestLandmark.lat = 0;
 closestLandmark.lng = 0;
 
 function initMap() {
-	getLocation();
+	getLocation(); // gets location of user
 	var myOptions = {
 		center: {lat: -34.397, lng: 150.644},
 		zoom: 13, // larger zoom number, larger zoom
@@ -97,6 +104,7 @@ function makePolyline() {
   	path.setMap(map);
 }
 
+// displays other users on the map
 // shout out to Wouter Florijn for the help on Stack Overflow
 // (http://stackoverflow.com/questions/29765720/google-maps-marker-loop-in-javascript)
 function showPeople(people) {
@@ -105,12 +113,12 @@ function showPeople(people) {
 		scaledSize: new google.maps.Size(50, 50)
 	};
 
-	for (i in people) {
-		if (people[i].login !== username) {
+	for (i in people) { // loops through all elements of people
+		if (people[i].login !== username) { // skips user
 			person = new google.maps.LatLng(people[i].lat,people[i].lng);
 			calcDistance(people[i].lat,people[i].lng,"person");
-			// defines marker, sets details
-			markers = new google.maps.Marker({
+			
+			markers = new google.maps.Marker({ // defines marker, sets details
 				position: person,
 				title: "<div id='infowindow'>"+people[i].login+
 						"<br />Distance from me: "+personMileDistance.toFixed(2)+" miles</div>",
@@ -136,7 +144,6 @@ function showLandmarks(landmarks) {
 	};
 
 	for (i in landmarks) {
-		console.log(landmarks[i].properties.Details);
 		lm_name = landmarks[i].properties.Location_Name;
 		lm = landmarks[i].properties.Details;
 		lm_coor = landmarks[i].geometry.coordinates;	
