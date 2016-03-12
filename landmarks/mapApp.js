@@ -5,6 +5,8 @@ var map;
 var marker;
 var myLat = 0, myLong = 0;
 var infowindow;
+var people_infowindow;
+var landmark_infowindow;
 //var me = new google.maps.LatLng(myLat, myLng);
 
 /*
@@ -95,8 +97,7 @@ function printStuff(data) {
 
 function showPeople(people) {
 
-	// Create new markers
-	peopleImage = {
+	peopleImage = { // people marker icon
 		url: 'http://icons.iconarchive.com/icons/umut-pulat/tulliana-2/128/laptop-icon.png',
 		scaledSize: new google.maps.Size(50, 50)
 	};
@@ -112,51 +113,43 @@ function showPeople(people) {
 				icon: peopleImage
 			});
 			people_marker.setMap(map);
-			console.log(people_marker);
-
-			var new_infowindow;
-
+/*
 			// Open info window on click of marker
 			google.maps.event.addListener(people_marker, 'click', function() {
-				new_infowindow[i].setContent(people_marker.title);
-				new_infowindow[i].open(map,people_marker);
-			});
+				people_infowindow.setContent(people_marker.title);
+				people_infowindow.open(map,people_marker);
+			});*/
 		}
 	}
 }
 
 function showLandmarks(landmarks) {
-	// landmarks
-	console.log(landmarks);
 
-	// Create new markers
-	landmarkImage = {
+	landmarkImage = { // landmark marker icon
 		url: 'https://d30y9cdsu7xlg0.cloudfront.net/png/174628-200.png',
-		scaledSize: new google.maps.Size(50, 50)
+		scaledSize: new google.maps.Size(40, 40)
 	};
-	//landmarkImage = 'https://d30y9cdsu7xlg0.cloudfront.net/png/174628-200.png';
+
+	var landmarker_list;
 
 	for (i in landmarks) {
 		lm = landmarks[i].properties.Location_Name;
 		lm_coor = landmarks[i].geometry.coordinates;
-		console.log(lm+" lat: "+lm_coor[0]+" long:"+lm_coor[1]);
+		console.log(lm+" lat: "+lm_coor[1]+" long:"+lm_coor[0]);
 	
-		landmark = new google.maps.LatLng(lm_coor[0],lm_coor[1]);
+		landmark = new google.maps.LatLng(lm_coor[1],lm_coor[0]);
 		landmarker = new google.maps.Marker({
 			position: landmark,
 			title: lm,
 			icon: landmarkImage
 		});
 		landmarker.setMap(map);
-		console.log(landmarkImage);
-
-		var new_infowindow;
-
+/*
 		// Open info window on click of marker
-		google.maps.event.addListener(landmarker, 'click', function() {
-			new_infowindow[i].setContent(landmarker.title);
-			new_infowindow[i].open(map,landmarker);
-		});
+		google.maps.event.addListener(landmarker[i], 'click', function() {
+			landmark_infowindow[i].setContent(landmarker.title);
+			landmark_infowindow[i].open(map,landmarker);
+		});*/
 	}
 
 }
