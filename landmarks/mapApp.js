@@ -88,11 +88,9 @@ function getData(latitude,longitude) {
 
 function printStuff(data) {
 
-	// people
-	showPeople(data.people);
+	showPeople(data.people); // people
 
-	// landmarks
-	showLandmarks(data.landmarks);
+	showLandmarks(data.landmarks); // landmarks
 }
 
 function showPeople(people) {
@@ -101,6 +99,8 @@ function showPeople(people) {
 		url: 'http://icons.iconarchive.com/icons/umut-pulat/tulliana-2/128/laptop-icon.png',
 		scaledSize: new google.maps.Size(50, 50)
 	};
+
+	people_infowindow = new google.maps.InfoWindow();
 
 	for (i in people) {
 		console.log(people[i].login+" lat: "+people[i].lat+" long:"+people[i].lng);
@@ -113,12 +113,12 @@ function showPeople(people) {
 				icon: peopleImage
 			});
 			people_marker.setMap(map);
-/*
+
 			// Open info window on click of marker
 			google.maps.event.addListener(people_marker, 'click', function() {
 				people_infowindow.setContent(people_marker.title);
 				people_infowindow.open(map,people_marker);
-			});*/
+			})
 		}
 	}
 }
@@ -130,7 +130,7 @@ function showLandmarks(landmarks) {
 		scaledSize: new google.maps.Size(40, 40)
 	};
 
-	var landmarker_list;
+	landmark_infowindow = new google.maps.InfoWindow();
 
 	for (i in landmarks) {
 		lm = landmarks[i].properties.Location_Name;
@@ -144,12 +144,12 @@ function showLandmarks(landmarks) {
 			icon: landmarkImage
 		});
 		landmarker.setMap(map);
-/*
+
 		// Open info window on click of marker
-		google.maps.event.addListener(landmarker[i], 'click', function() {
-			landmark_infowindow[i].setContent(landmarker.title);
-			landmark_infowindow[i].open(map,landmarker);
-		});*/
+		google.maps.event.addListener(landmarker, 'click', function() {
+			landmark_infowindow.setContent(landmarker.title);
+			landmark_infowindow.open(map,landmarker);
+		});
 	}
 
 }
