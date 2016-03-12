@@ -1,8 +1,8 @@
 // mapApp.js
 
-// set up map
 var map;
 var marker;
+username = "MARI_YOUNG";
 myLat = 0, myLong = 0;
 var infowindow;
 closestLandmark = {};
@@ -12,19 +12,17 @@ closestLandmark.lat = 0;
 closestLandmark.lng = 0;
 
 function initMap() {
-
 	getLocation();
-
 	var myOptions = {
 		center: {lat: -34.397, lng: 150.644},
 		zoom: 13, // larger zoom number, larger zoom
 		mapTypeId: google.maps.MapTypeId.ROADMAP
 	};
-	
+
+	// initializes the map
 	map = new google.maps.Map(document.getElementById('map'), myOptions);
 
-	// gets user's location
-	function getLocation() {
+	function getLocation() { // gets user's location
 		if (navigator.geolocation) { // checks if navigator.geolocation is supported by browser
 			navigator.geolocation.getCurrentPosition(function(position) {
 					myLat = position.coords.latitude;
@@ -37,17 +35,13 @@ function initMap() {
 	}
 }
 
+// send login, latitude, and longitude
 function getData(latitude,longitude) {
-	// send login, latitude, and longitude
-	username = "MARI_YOUNG";
 	var parameters = "login="+username+"&lat="+myLat+"&lng="+myLong;
-	var theData;
-
 	var request = new XMLHttpRequest();
 	request.open("POST","https://defense-in-derpth.herokuapp.com/sendLocation",true);
 	request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	request.send(parameters);
-
 	request.onreadystatechange = function() {
 		if (request.readyState == 4 && request.status == 200) {
 			raw = request.responseText;
@@ -68,14 +62,12 @@ function loadElements(data) {
 function renderMe() {
 	me = new google.maps.LatLng(myLat, myLong);
 	map.panTo(me); // Update map and go there...
-
-	// Create a marker
-	marker = new google.maps.Marker({
+	marker = new google.maps.Marker({ // Create a marker for me
 		position: me,
 		title: "<div id='infowindow'><h2>Current Location</h2>"+
 				"The nearest historical landmark \""
 				+closestLandmark.name+"\"<br /> is " 
-				+closestLandmark.distance.toFixed(2)+" miles away </div>"
+				+closestLandmark.distance.toFixed(2)+" miles away</div>"
 	});
 	marker.setMap(map);
 	infowindow = new google.maps.InfoWindow();
@@ -85,13 +77,11 @@ function renderMe() {
 		infowindow.setContent(marker.title);
 		infowindow.open(map, marker);
 	});
-
 	makePolyline(); // draws line to nearest landmark
 }
 
 // draws a line between me (the user) and the nearest landmark
 function makePolyline() {
-
 	var pathCoords = [
     	{lat: myLat, lng: myLong},
     	{lat: closestLandmark.lat, lng: closestLandmark.lng}
@@ -104,14 +94,12 @@ function makePolyline() {
     	strokeOpacity: 1.0,
     	strokeWeight: 5
   	});
-
   	path.setMap(map);
 }
 
 // shout out to Wouter Florijn for the help on Stack Overflow
 // (http://stackoverflow.com/questions/29765720/google-maps-marker-loop-in-javascript)
 function showPeople(people) {
-
 	peopleImage = { // people marker icon
 		url: 'http://icons.iconarchive.com/icons/umut-pulat/tulliana-2/128/laptop-icon.png',
 		scaledSize: new google.maps.Size(50, 50)
@@ -120,14 +108,15 @@ function showPeople(people) {
 	for (i in people) {
 		if (people[i].login !== username) {
 			person = new google.maps.LatLng(people[i].lat,people[i].lng);
+			calcDistance(people[i].lat,people[i].lng,"person");
+			// defines marker, sets details
 			markers = new google.maps.Marker({
 				position: person,
-				title: people[i].login,
+				title: "<div id='infowindow'>"+people[i].login+
+						"<br />Distance from me: "+personMileDistance.toFixed(2)+" miles</div>",
 				icon: peopleImage
 			});
 			markers.setMap(map);
-			calcDistance(people[i].lat,people[i].lng,"person");
-			console.log(markers.title + ", distance: "+personMileDistance)
 
 			// Open info window on click of marker
 			google.maps.event.addListener(markers, 'click', function() {
@@ -141,14 +130,15 @@ function showPeople(people) {
 // places landmarks on the map
 // NOTE: lm_coor[1]: is latitude, lm_coor[0] is longitude
 function showLandmarks(landmarks) {
-
 	landmarkImage = { // landmark marker icon
 		url: 'https://d30y9cdsu7xlg0.cloudfront.net/png/174628-200.png',
 		scaledSize: new google.maps.Size(40, 40)
 	};
 
 	for (i in landmarks) {
-		lm = landmarks[i].properties.Location_Name;
+		console.log(landmarks[i].properties.Details);
+		lm_name = landmarks[i].properties.Location_Name;
+		lm = landmarks[i].properties.Details;
 		lm_coor = landmarks[i].geometry.coordinates;	
 		landmark = new google.maps.LatLng(lm_coor[1],lm_coor[0]);
 		markers = new google.maps.Marker({
@@ -169,19 +159,14 @@ function showLandmarks(landmarks) {
 
 // deals with everything distance related
 function landmarkDistanceHandling(){
-
 	calcDistance(lm_coor[1],lm_coor[0],"landmark");
-
 	// find closest distance/landmark
 	if (landmarkMileDistance < closestLandmark.distance) {
 		closestLandmark.distance = landmarkMileDistance;
-		closestLandmark.name = lm;
+		closestLandmark.name = lm_name;
 		closestLandmark.lat = lm_coor[1];
 		closestLandmark.lng = lm_coor[0];
 	}
-	console.log("closestLandmark: "+closestLandmark.name+" dist: "
-				+closestLandmark.distance+" lat: "+
-				closestLandmark.lat+" long: "+closestLandmark.lng);
 }
 
 // finds distance between an inputted landmark and me.
@@ -189,7 +174,6 @@ function landmarkDistanceHandling(){
 // shout out to talkol on Stack Overflow for the guidance.
 // (http://stackoverflow.com/questions/14560999/using-the-haversine-formula-in-javascript)
 function calcDistance(lat,lng,obj) {
-
 	var R = 6371; // km 
 	
 	// latitude difference
@@ -218,6 +202,4 @@ function calcDistance(lat,lng,obj) {
 Number.prototype.toRad = function() {
 	return this * Math.PI / 180;
 }
-
-
 
