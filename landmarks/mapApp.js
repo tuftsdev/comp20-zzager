@@ -5,6 +5,8 @@ var map;
 var marker;
 myLat = 0, myLong = 0;
 var infowindow;
+var closestLandmark = "";
+var closestDistance = 1;
 //var me = new google.maps.LatLng(myLat, myLng);
 
 /*
@@ -33,33 +35,34 @@ function initMap() {
 			navigator.geolocation.getCurrentPosition(function(position) {
 					myLat = position.coords.latitude;
 					myLong = position.coords.longitude;
-					renderMap();
 					getData(myLat,myLong);
+					renderMe();
 				});
 		} else {
 			alert("Geolocation is not supported by your web browser. Sorry!");
 		}
 	}
+}
 
-	function renderMap() {
-		me = new google.maps.LatLng(myLat, myLong);
-		map.panTo(me); // Update map and go there...
+// puts me on the map with a marker
+function renderMe() {
+	me = new google.maps.LatLng(myLat, myLong);
+	map.panTo(me); // Update map and go there...
 
-		// Create a marker
-		marker = new google.maps.Marker({
-			position: me,
-			title: "I am here."
-		});
-		marker.setMap(map);
+	// Create a marker
+	marker = new google.maps.Marker({
+		position: me,
+		title: myLat
+	});
+	marker.setMap(map);
 
-		infowindow = new google.maps.InfoWindow();
-			
-		// Open info window on click of marker
-		google.maps.event.addListener(marker, 'click', function() {
-			infowindow.setContent(marker.title);
-			infowindow.open(map, marker);
-		});
-	}
+	infowindow = new google.maps.InfoWindow();
+		
+	// Open info window on click of marker
+	google.maps.event.addListener(marker, 'click', function() {
+		infowindow.setContent(marker.title);
+		infowindow.open(map, marker);
+	});
 }
 
 function getData(latitude,longitude) {
@@ -135,9 +138,7 @@ function showLandmarks(landmarks) {
 			icon: landmarkImage
 		});
 		markers.setMap(map);
-
-		calcDistance(lm_coor[1],lm_coor[0]);
-		console.log("distance: "+mileDistance);
+		distanceHandling();
 
 		// Open info window on click of marker
 		google.maps.event.addListener(markers, 'click', function() {
@@ -145,7 +146,19 @@ function showLandmarks(landmarks) {
 			infowindow.open(map,this);
 		});
 	}
+}
 
+// deals with everything distance related
+function distanceHandling(){
+
+	calcDistance(lm_coor[1],lm_coor[0]);
+
+	// find closest distance/landmark
+	if (mileDistance < closestDistance) {
+		closestDistance = mileDistance;
+		closestLandmark = lm;
+	}
+	console.log("closestLandmark: "+closestLandmark);
 }
 
 // finds distance between an inputted landmark and me.
