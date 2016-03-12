@@ -3,10 +3,7 @@
 // set up map
 var map;
 var marker;
-var myLat = 0, myLong = 0;
-var infowindow;
-var people_infowindow;
-var landmark_infowindow;
+myLat = 0, myLong = 0;
 //var me = new google.maps.LatLng(myLat, myLng);
 
 /*
@@ -28,8 +25,6 @@ function initMap() {
 	};
 	
 	map = new google.maps.Map(document.getElementById('map'), myOptions);
-		
-	infowindow = new google.maps.InfoWindow();
 
 	// gets user's location
 	function getLocation() {
@@ -52,9 +47,11 @@ function initMap() {
 		// Create a marker
 		marker = new google.maps.Marker({
 			position: me,
-			title: "Here I Am!"
+			title: "I am here."
 		});
 		marker.setMap(map);
+
+		var infowindow = new google.maps.InfoWindow();
 			
 		// Open info window on click of marker
 		google.maps.event.addListener(marker, 'click', function() {
@@ -87,12 +84,12 @@ function getData(latitude,longitude) {
 }
 
 function printStuff(data) {
-
 	showPeople(data.people); // people
-
 	showLandmarks(data.landmarks); // landmarks
 }
 
+// shout out to Wouter Florijn for the help on Stack Overflow
+// (http://stackoverflow.com/questions/29765720/google-maps-marker-loop-in-javascript)
 function showPeople(people) {
 
 	peopleImage = { // people marker icon
@@ -100,27 +97,26 @@ function showPeople(people) {
 		scaledSize: new google.maps.Size(50, 50)
 	};
 
-	people_infowindow = new google.maps.InfoWindow();
-
 	for (i in people) {
-		console.log(people[i].login+" lat: "+people[i].lat+" long:"+people[i].lng);
-
 		if (people[i].login !== username) {
 			person = new google.maps.LatLng(people[i].lat,people[i].lng);
-			people_marker = new google.maps.Marker({
+			markers = new google.maps.Marker({
 				position: person,
 				title: people[i].login,
 				icon: peopleImage
 			});
-			people_marker.setMap(map);
+			markers.setMap(map);
+
+			var people_infowindow = new google.maps.InfoWindow();
 
 			// Open info window on click of marker
-			google.maps.event.addListener(people_marker, 'click', function() {
-				people_infowindow.setContent(people_marker.title);
-				people_infowindow.open(map,people_marker);
+			google.maps.event.addListener(markers, 'click', function() {
+				people_infowindow.setContent(this.title);
+				people_infowindow.open(map,this);
 			})
 		}
 	}
+	console.log(markers);
 }
 
 function showLandmarks(landmarks) {
@@ -130,6 +126,8 @@ function showLandmarks(landmarks) {
 		scaledSize: new google.maps.Size(40, 40)
 	};
 
+	console.log(myLat+" "+myLong);
+
 	landmark_infowindow = new google.maps.InfoWindow();
 
 	for (i in landmarks) {
@@ -138,17 +136,17 @@ function showLandmarks(landmarks) {
 		console.log(lm+" lat: "+lm_coor[1]+" long:"+lm_coor[0]);
 	
 		landmark = new google.maps.LatLng(lm_coor[1],lm_coor[0]);
-		landmarker = new google.maps.Marker({
+		markers = new google.maps.Marker({
 			position: landmark,
 			title: lm,
 			icon: landmarkImage
 		});
-		landmarker.setMap(map);
+		markers.setMap(map);
 
 		// Open info window on click of marker
-		google.maps.event.addListener(landmarker, 'click', function() {
-			landmark_infowindow.setContent(landmarker.title);
-			landmark_infowindow.open(map,landmarker);
+		google.maps.event.addListener(markers, 'click', function() {
+			landmark_infowindow.setContent(this.title);
+			landmark_infowindow.open(map,this);
 		});
 	}
 
