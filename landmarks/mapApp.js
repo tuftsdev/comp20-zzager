@@ -4,6 +4,7 @@
 var map;
 var marker;
 myLat = 0, myLong = 0;
+var infowindow;
 //var me = new google.maps.LatLng(myLat, myLng);
 
 /*
@@ -51,7 +52,7 @@ function initMap() {
 		});
 		marker.setMap(map);
 
-		var infowindow = new google.maps.InfoWindow();
+		infowindow = new google.maps.InfoWindow();
 			
 		// Open info window on click of marker
 		google.maps.event.addListener(marker, 'click', function() {
@@ -66,7 +67,6 @@ function getData(latitude,longitude) {
 	username = "MARI_YOUNG";
 	var parameters = "login="+username+"&lat="+myLat+"&lng="+myLong;
 	var theData;
-	console.log(parameters);
 
 	var request = new XMLHttpRequest();
 	request.open("POST","https://defense-in-derpth.herokuapp.com/sendLocation",true);
@@ -107,16 +107,13 @@ function showPeople(people) {
 			});
 			markers.setMap(map);
 
-			var people_infowindow = new google.maps.InfoWindow();
-
 			// Open info window on click of marker
 			google.maps.event.addListener(markers, 'click', function() {
-				people_infowindow.setContent(this.title);
-				people_infowindow.open(map,this);
+				infowindow.setContent(this.title);
+				infowindow.open(map,this);
 			})
 		}
 	}
-	console.log(markers);
 }
 
 function showLandmarks(landmarks) {
@@ -125,10 +122,6 @@ function showLandmarks(landmarks) {
 		url: 'https://d30y9cdsu7xlg0.cloudfront.net/png/174628-200.png',
 		scaledSize: new google.maps.Size(40, 40)
 	};
-
-	console.log(myLat+" "+myLong);
-
-	landmark_infowindow = new google.maps.InfoWindow();
 
 	for (i in landmarks) {
 		lm = landmarks[i].properties.Location_Name;
@@ -143,16 +136,50 @@ function showLandmarks(landmarks) {
 		});
 		markers.setMap(map);
 
+		calcDistance(lm_coor[1],lm_coor[0]);
+		console.log("distance: "+mileDistance);
+
 		// Open info window on click of marker
 		google.maps.event.addListener(markers, 'click', function() {
-			landmark_infowindow.setContent(this.title);
-			landmark_infowindow.open(map,this);
+			infowindow.setContent(this.title);
+			infowindow.open(map,this);
 		});
 	}
 
 }
 
+// finds distance between an inputted landmark and me.
+// both are objects with "lat" and "lng" keys.
+// shout out to talkol on Stack Overflow for the guidance.
+// (http://stackoverflow.com/questions/14560999/using-the-haversine-formula-in-javascript)
+function calcDistance(landmarkLat,landmarkLng) {
 
+	var R = 6371; // km 
+	
+	// latitude difference
+	var x1 = landmarkLat-myLat;
+	var dLat = x1.toRad();
+
+	// longitude difference
+	var x2 = landmarkLng-myLong;
+	var dLon = x2.toRad();
+
+	var a = Math.sin(dLat/2) * Math.sin(dLat/2) + 
+			Math.cos(myLat.toRad()) * Math.cos(landmarkLat.toRad()) * 
+			Math.sin(dLon/2) * Math.sin(dLon/2);  
+	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+	var kmDistance = R * c;
+
+	// convert from KM to miles
+	mileDistance = kmDistance * 0.621371;
+
+	//console.log("distance: "+mileDistance);
+
+}
+
+Number.prototype.toRad = function() {
+	return this * Math.PI / 180;
+}
 
 
 
