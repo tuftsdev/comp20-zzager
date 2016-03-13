@@ -22,6 +22,7 @@ This assignment took me approximately 10 hours to complete.
 
 
 Help from:
+
 talkol on Stack Overflow (http://stackoverflow.com/questions/14560999/using-the-haversine-formula-in-javascript)
 
 Wouter Florijn on Stack Overflow (http://stackoverflow.com/questions/29765720/google-maps-marker-loop-in-javascript)
