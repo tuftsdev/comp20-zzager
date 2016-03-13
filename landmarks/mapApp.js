@@ -71,7 +71,7 @@ function renderMe() {
 	map.panTo(me); // Update map and go there...
 	marker = new google.maps.Marker({ // Create a marker for me
 		position: me,
-		title: "<div id='infowindow'><h2>Current Location</h2>"+
+		title: "<div id='infowindow'><h2>"+username+"</h2><h3>Current Location</h3>"+
 				"The nearest historical landmark \""
 				+closestLandmark.name+"\"<br /> is " 
 				+closestLandmark.distance.toFixed(2)+" miles away</div>"
