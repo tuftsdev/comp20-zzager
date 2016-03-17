@@ -6,11 +6,14 @@
 // Example: Sat Jul 23 02:16:57 2005 - Hello all!
 
 var counter = 0;
+//var counter = localStorage.length;
+/*
+for (i = 0; i < counter; i++) {
 
+}
+*/
 $(document).ready(function(){
 
-	elem = $("#log");
-	elem2 = $("#msg");
 
 
 	$("#msg").on("keydown",function(key){
@@ -20,7 +23,7 @@ $(document).ready(function(){
     		entry = today+" - "+this.value;
     		localStorage.setItem(counter,entry);
     		this.value = "";
-    		$("#log").append("<p>"+localStorage[counter]+"</p>");
+    		$("div#log").prepend(localStorage[counter]);
     		console.log(localStorage[counter]);
     		counter++;
     	}
