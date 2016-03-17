@@ -17,4 +17,6 @@ This assignment took me roughly two hours to fully complete.
 
 Thanks to:
 
-Conrad on Stack Overflow (http://stackoverflow.com/questions/4088467/get-the-value-in-an-input-text-box)
+Conrad on Stack Overflow for help with text box input (http://stackoverflow.com/questions/4088467/get-the-value-in-an-input-text-box)
+
+Pamela K. Kinney for the pirate imagery (http://pamelakkinney.blogspot.com/2014/05/supernatural-friday-pirate-legends-of.html)

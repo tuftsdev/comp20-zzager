@@ -1,5 +1,10 @@
 /* style.css */
 
+body {
+	background-image: url("http://1.bp.blogspot.com/-kk57iHAx4Gs/U3YXGhuhXYI/AAAAAAAAEg0/ne2Osho4ACk/s1600/Crossbones.png");
+	background-color: red;
+}
+
 #log p {
 	background-color: #8EF4A3;
 	border-radius: 10px;
