@@ -5,12 +5,31 @@
 // A space followed by a hyphen followed by a space must follow the timestamp. 
 // Example: Sat Jul 23 02:16:57 2005 - Hello all!
 
+var counter = 0;
+
 $(document).ready(function(){
-    $("#log").html("hi there");
+
+	elem = $("#log");
+	elem2 = $("#msg");
+
+
+	$("#msg").on("keydown",function(key){
+		
+    	if (key.keyCode == 13) { // Enter (keycode:13) is pressed
+    		today = new Date();
+    		entry = today+" - "+this.value;
+    		localStorage.setItem(counter,entry);
+    		this.value = "";
+    		$("#log").append("<p>"+localStorage[counter]+"</p>");
+    		console.log(localStorage[counter]);
+    		counter++;
+    	}
+	});
+
 });
 
-var today = new Date();
 
-today += " - Hello all!"
 
-console.log(today);
+
+
+
