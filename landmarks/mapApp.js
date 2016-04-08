@@ -7,6 +7,10 @@
 
 // by Zach Zager
 
+Number.prototype.toRad = function() {
+	return this * Math.PI / 180;
+}
+
 var map;
 var marker;
 username = "MARI_YOUNG";
@@ -46,7 +50,7 @@ function initMap() {
 function getData(latitude,longitude) {
 	var parameters = "login="+username+"&lat="+myLat+"&lng="+myLong;
 	var request = new XMLHttpRequest();
-	request.open("POST","https://defense-in-derpth.herokuapp.com/sendLocation",true);
+	request.open("POST","https://desolate-cove-62070.herokuapp.com/sendLocation",true);
 	request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	request.send(parameters);
 	request.onreadystatechange = function() {
@@ -115,6 +119,7 @@ function showPeople(people) {
 
 	for (i in people) { // loops through all elements of people
 		if (people[i].login !== username) { // skips user
+			console.log(people[i]);
 			person = new google.maps.LatLng(people[i].lat,people[i].lng);
 			calcDistance(people[i].lat,people[i].lng,"person");
 			
@@ -182,6 +187,9 @@ function landmarkDistanceHandling(){
 // (http://stackoverflow.com/questions/14560999/using-the-haversine-formula-in-javascript)
 function calcDistance(lat,lng,obj) {
 	var R = 6371; // km 
+
+	lat = Number(lat);
+	lng = Number(lng);
 	
 	// latitude difference
 	var x1 = lat-myLat;
@@ -192,8 +200,8 @@ function calcDistance(lat,lng,obj) {
 	var dLon = x2.toRad();
 
 	var a = Math.sin(dLat/2) * Math.sin(dLat/2) + 
-			Math.cos(myLat.toRad()) * Math.cos(lat.toRad()) * 
-			Math.sin(dLon/2) * Math.sin(dLon/2);  
+			Math.cos(myLat.toRad()) * Math.cos(lat.toRad()) 
+			* Math.sin(dLon/2) * Math.sin(dLon/2);  
 	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
 	var kmDistance = R * c;
 
@@ -205,8 +213,3 @@ function calcDistance(lat,lng,obj) {
 		personMileDistance = kmDistance * 0.621371;
 	}
 }
-
-Number.prototype.toRad = function() {
-	return this * Math.PI / 180;
-}
-
