@@ -1,4 +1,5 @@
 README.md
+
 Zach Zager
 
 This repository contains several of the assignments I completed for the Tufts University Web Programming course (Comp 20) taught by Ming Chow. These assignments served to demonstrate the many possible approaches to web programming as well as the challenges and opportunities. They demonstrate how my skills have developed throughout the course as well as the breadth of the course focus.
