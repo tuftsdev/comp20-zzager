@@ -10,4 +10,9 @@ Tufts University
 
 Instructor: Ming Chow
 
-I spent approximately seven hours looking through Duc's code, testing things out, researching security, and writing up the report.
+
+The report has been completed and is available online via Github Pages.
+
+I worked with Duc Nguyen to find security issues in our respective servers. I also got help and information from several online sources. These are cited in the report.
+
+I spent approximately seven hours looking through Duc's code, testing different hacking methods, researching security, and writing up the report.
