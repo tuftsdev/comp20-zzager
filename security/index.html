@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+	<title>Security Analysis of Duc Nguyen's Location Data Server</title>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<head>
+</head>
+<body>
+	<div class="container">
+		<div class="jumbotron">
+			<h1>Security Analysis of Duc Nguyen's Location Data Server</h1>
+			<div class="row">
+				<div class='col-sm-6'>
+					<h3>Prepared by Zach Zager</h3>
+				</div>
+				<div class='col-sm-6'>
+					<h3>Web Programming (COMP 20)</h3>
+				</div>
+			</div>
+			<div class='row'>
+				<div class='col-sm-6'>
+					<h3>Tufts University</h3>
+				</div>
+				<div class='col-sm-6'>
+					<h3>Instructor: Ming Chow</h3>
+				</div>
+			</div>
+		</div>
+		<hl>
+		<h2>Introduction</h2>
+		<p>This is an assessment of the security of Duc Nguyen's web server developed for <a href='http://tuftsdev.github.io/WebProgramming/assignments/a3.html'>Assignment 3</a>. You can find his server <a href='https://boiling-thicket-49932.herokuapp.com/'>here</a>. This assignment entails:</p>
+		<ol>
+			<li>Developing a server-side web application using Heroku, Node.js, and the Express web framework</li>
+			<li>Enabling and using Cross-Origin Resource Sharing (CORS)</li>
+			<li>Reading and writing data to a MongoDB database</li>
+			<li>Building JSON-based APIs</li>
+		</ol>
+		<p>These technologies and techniques are extremely useful, but present many potential problems for security. This application lacks the necessary security for public deployment.</p>
+
+		<h2>Methodology</h2>
+		<p>I started testing using a "black-box" approach. I used a JavaScript file I wrote to test my own server to send data to Duc's. I sent a variety of scripts, embedded content, and HTML content to Duc's server. After evaluating these results, I searched through Duc's code to identify specific vulnerabilities.</p>
+
+		<h2>Abstract of findings</h2>
+		<p>The main point of insecurity for this server is it's acceptance of nearly all user input. This is a common pitfall for web applications because hackers constantly find clever ways to bypass security efforts. While this program does a good job screening location data, it does little to prevent deviant user login information. The server does a good job of preventing scripts from being run on it, but it does little to prevent these from being sent to users. By storing scripts, video embed links, and HTML content on the server as login data, hackers can exploit this program to propagate malicious content. The server's security also suffers from it's unlimited availability. Anyone with the heroku app link can access the POST and GET commands of the server API.</p>
+
+		<h2>Issues found and technical analysis</h2>
+		<ol>
+			<h3><li>Content Injection and Cross-Site Scripting</h3>
+				<ul>
+					<li>The sendLocation POST API does not restrict login input to valid logins strings. This creates the opportunity for two similar types of attacks: cross-site scripting and injection. Users can send scripts (cross-site scripting) or content (injection) to the server, which stores them in the database.</li>
+					<li>Severity: <strong>Medium</strong>. This vulnerability can cause inconvenience and even fraud for users. It allows hackers to store non-login information in the login document of the database. It is also an easy flaw to exploit. I only consider it a medium issue because there is no risk of scripts being run on the server.</li>
+					<li>The main problem with this vulnerability is that it enables hackers to store content that does not function like a simple string when served to the user. This data can be innocuous, like this injected Game of Thrones trailer:
+						<br><img src="got.png" class="img-thumbnail" alt="Game of Thrones"><br><br>
+					However, the data can also be malicious. Below is an example of a mock Amazon submission form. Hackers could serve a similar form that acquires private information from clients using the server. This would represent a significant failure by the program to protect it's users.
+						<br><img src="amazon.png" class="img-thumbnail" alt="Amazon"><br><br>
+
+					In addition to static content, hackers can send scripts (cross-site scripting) over the server that affects the user's experience or completely ruins it. Below is an example of an infinitely looping notification window:
+						<br><img src="mwahaha.png" class="img-thumbnail" alt="Infinite Notification"><br>
+					Hackers could send far more malicious scripts to acquire sensitive information about the user (location, IP Address, etc.). A study by White Hat Security found that 47.9% of websites are vulnerable to XSS attacks (<a href='https://securityintelligence.com/cross-site-scripting-attacks-pose-ongoing-threat/'>source</a>).
+					</li><br>
+					<li>Resolution: There are several simple methods for addressing this issue. The server could contain a list of acceptable logins. This way, any login parameter sent to the server that's not accepted will not be stored. The server could also parse the login string for words like "embed", "script", or even any non-alphanumeric characters. If any of these terms are found the POST request can be rejected.</li>
+				</ul>
+			</li>
+			<h3><li>No password or account required</h3>
+				<ul>
+					<li>This issue is found in all fields of the server API.</li>
+					<li>Severity: <strong>Low</strong>. This does not enable users to damage the database or send particularly malicious content. It does, however, reduce the amount of control the server administrator has over who can access the server. It also restricts the admin's ability to identify specific users who are using the server improperly. If one particular user is taking advantage of the server to store long strings of data in the logins field of the database, the admin has no way of tracking them.</li>
+					<li>Any user can access any of the API fields. The server has no way of controlling who has access other than by checking for valid input. This issue is evident by looking through the server code. Each API interface only utilizes the login string and location data. The only verification is to confirm that the location points are valid GPS coordinates and that the login is a valid string. This is shown below:
+					<br><code>if(login == undefined || isNaN(lat) || isNaN(lng)){<br>
+								&emsp;&emsp;&emsp;&emsp;response.send({"error":"Whoops, something is wrong with your data!"});<br>
+							}</code>
+					</li><br>
+					<li>This issue can be resolved in several ways. A practical method would be to assign each unique user a specific login (and potentially have them set a password for added security). If any user tries to access the server without a specific login, they will be denied. This can by done by looping through an array of valid logins. jQuery makes this very easy with the "inArray" function (<code>$.inArray(value, array)</code>), which returns -1 if the value is not found. Using this simple trick could greatly reduce the server's security issues. It might looks something like:
+					<br><code>if($.inArray(request.body.login, loginList) || isNaN(lat) || isNaN(lng)){<br>
+								&emsp;&emsp;&emsp;&emsp;response.send({"error":"Whoops, something is wrong with your data!"});<br>
+							}</code>
+					</li>
+				</ul>
+			</li>
+			<h3><li>Cross-Origin Resource-Sharing</h3>
+				<ul>
+					<li>This issue is found in the sendLocation POST, checkins.json GET, and the index ('/') GET server APIs.</li>
+					<li>Severity: <strong>Medium</strong>. While cross-origin resource-sharing is frequently enabled, it still presents an opportunity for crafty hackers to infiltrate the server and database. Any site can send an XMLHttpRequest request to the site and access the server’s response. This would not be the case if cross-origin resource-sharing had not been enabled.</li>
+					<li>I found this issue when looking through Duc's server code and finding that CORS had been enabled.</li>
+					<li>This problem can be solved by adding extra layers of security to enabling CORS. The server can require that the user send an <code>OPTIONS</code> request to ask the server if the full request is permissable. One useful SERVER header response is <code>Access-Control-Allow-Headers</code>. This is a list of allowable custom request headers such as <code>AUTHORIZATION</code>, <code>X-CLIENT-ID</code>, and <code>X-CLIENT_SECRET</code> (<a href='https://staticapps.org/articles/cross-domain-requests-with-cors/'>source</a>). Requiring specific header values will enhance security and limit the number of users with direct access to the server.</li>
+				</ul>
+			</li>
+		</ol>
+		<h2>Conclusion</h2>
+		<p>The various security vulnerabilities of Duc's server make it easy to deface. The ease with which hackers can send malicious or even just improper data should not be possible in a publicly available product. Unfortunately, security issues are all too common. According to WhiteHat Security's <i>2015 Website Security Statistics Report</i>, 86% of all websites have at least one serious vulnerability. "The likelihood that these vulnerabilities pertain to insufficient transport layer protection is 70% and the likelihood of information leakage is 56% (<a href='http://www.scmagazine.com/whitehat-security-release-website-security-statistics-report/article/416402/'>source</a>)." These problems are very similar to those faced by Duc's server. Ultimately, the best way to avoid security issues is to remain cautious of user input. Never fully trust any information the user sends to the server. Remaining cautious of this input greatly reduces the risk of damaging cyberattacks.</p>
+		<br>
+		<figure class="figure">
+  			<img src='suspicion.png' class="figure-img img-fluid img-rounded center-block" alt="Suspicion XKCD Comic">
+  			<figcaption class="figure-caption" style='text-align:center;'>Security comic from XKCD</figcaption>
+		</figure>
+		<br>
+	</div>
+</body>
+</html>
