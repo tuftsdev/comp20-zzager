@@ -11,7 +11,7 @@ Tufts University
 Instructor: Ming Chow
 
 
-The report has been completed and is available online via Github Pages.
+The report has been completed and is available online via Github Pages (http://tuftsdev.github.io/comp20-zzager/security/).
 
 I worked with Duc Nguyen to find security issues in our respective servers. I also got help and information from several online sources. These are cited in the report.
 
